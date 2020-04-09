@@ -1,5 +1,5 @@
 class CardController < ApplicationController
-  before_action :set_card, only: [:show, :edit, :update]
+  before_action :set_card, only: [:show, :edit, :update, :destroy]
 
   def new
     @card = Card.new #空のcardインスタンスの箱を作成
@@ -19,15 +19,22 @@ class CardController < ApplicationController
   end
 
   def edit
+    @lists = List.where(user: current_user)
+    #.where(条件)で条件に一致するリストを@listsに格納している
+    #user(id): とcurrent_userが一致するlistを探している
   end
 
   def update
-    
     if @card.update_attributes(card_params)
       redirect_to :root
     else
       render action: :edit
     end
+  end
+
+  def destroy
+    @card.destroy
+    redirect_to :root
   end
 
   private
