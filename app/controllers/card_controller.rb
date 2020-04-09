@@ -1,4 +1,5 @@
 class CardController < ApplicationController
+  before_action :set_card, only: [:show, :edit, :update]
 
   def new
     @card = Card.new #空のcardインスタンスの箱を作成
@@ -15,7 +16,18 @@ class CardController < ApplicationController
   end
 
   def show
-    @card = Card.find_by(id: params[:id])
+  end
+
+  def edit
+  end
+
+  def update
+    
+    if @card.update_attributes(card_params)
+      redirect_to :root
+    else
+      render action: :edit
+    end
   end
 
   private
@@ -23,4 +35,9 @@ class CardController < ApplicationController
       params.require(:card).permit(:title, :memo, :list_id)
     end
     #cardの箱のtitleとmemoとlist_idを変更できるように許可
+
+    def set_card
+      @card = Card.find_by(id: params[:id])
+    end
+
 end
